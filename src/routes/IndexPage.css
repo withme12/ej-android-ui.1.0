@@ -1,0 +1,20 @@
+.photoWall {
+  height: 200px;
+  overflow-y: hidden;
+}
+.photo {
+  width: 100%;
+}
+/* 栏目列表 */
+.category_list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.category_list_item {
+  width: 33%;
+  height: 80px;
+  text-align: center;
+  padding: 1em 0;
+}
