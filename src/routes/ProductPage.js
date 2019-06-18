@@ -1,7 +1,12 @@
-import {  ListView } from 'antd-mobile';
+import {  ListView,SearchBar } from 'antd-mobile';
+import {TabBar,List,NavBar,Icon,Drawer,sidebar} from 'antd-mobile'
+import {ReactDOM,mountNode} from 'react'
 import React from 'react'
 import axios from 'axios'
+import {connect} from 'dva'
+import {withRouter,routerRedux} from 'dva/router'
 
+import App2 from './App2'
 
 // const data = [
 //     {
@@ -69,12 +74,21 @@ class ProductPage extends React.Component {
             // description :"kakakkaka",
             // price:35
           }],
+          docked: false,
           dataSource,
           isLoading: true,
           height: (document.documentElement.clientHeight * 3) / 4,
         };
       }
-    
+
+
+      
+      
+      onDock = () => {
+        this.setState({
+          docked: !this.state.docked,
+        });
+      }
       componentDidMount() {
         //const hei = document.documentElement.clientHeight - ReactDOM.findDOMNode(this.lv).parentNode.offsetTop;
         setTimeout(() => {
@@ -94,7 +108,7 @@ class ProductPage extends React.Component {
         .then((result)=>{
           // 将查询数据更新到state中
          this.setState({list:result.data});
-         console.log("hahahhhhaaaahhhhaaa");
+       
         })
         .finally(()=>{
           this.setState({loading:false});
@@ -116,13 +130,120 @@ class ProductPage extends React.Component {
         }, 1000);
       }
     
+
+      findbyId(id){
+        axios.get("/category/findAllProductWithCategory?id="+id).then((result) => {
+          //  this.setState({list:result.data});
+        })
+      }
+
+
       render() {
+
+
+
+        const sidebar = (<List>
+          {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((i, index) => {
+            if (index === 0) {
+              return (<List.Item key={index} 
+             
+               
+                onClick={this.findbyId(index+1)}
+              >保姆</List.Item>);
+            }
+            if (index === 1) {
+            return (<List.Item key={index}
+           
+              onClick={this.findbyId(index+1)}
+            >育婴</List.Item>);
+          }
+          if (index === 2) {
+            return (<List.Item key={index}
+              
+              onClick={this.findbyId(index+1)}
+            >保洁</List.Item>);
+          }
+          if (index === 3) {
+            return (<List.Item key={index}
+              
+              onClick={this.findbyId(index+1)}
+            >月嫂</List.Item>);
+          }
+          if (index === 4) {
+            return (<List.Item key={index}
+              
+              onClick={this.findbyId(index+1)}
+            >搬家</List.Item>);
+          }
+          if (index ===5) {
+            return (<List.Item key={index}
+              
+              onClick={this.findbyId(index+1)}
+            >老人护理</List.Item>);
+          }
+          if (index === 6) {
+            return (<List.Item key={index}
+              
+              onClick={this.findbyId(index+1)}
+            >高级家具安装</List.Item>);
+          }
+          if (index === 7) {
+            return (<List.Item key={index}
+          
+              onClick={this.findbyId(index+1)}
+            >一般家具安装</List.Item>);
+          }
+          if (index === 8) {
+            return (<List.Item key={index}
+           
+              onClick={this.findbyId(index+1)}
+            >家庭烹饪</List.Item>);
+          }
+          if (index === 9) {
+            return (<List.Item key={index}
+           
+              onClick={this.findbyId(index+1)}
+            >普通区域清洁</List.Item>);
+          }
+          if (index === 10) {
+            return (<List.Item key={index}
+           
+              onClick={this.findbyId(index+1)}
+            >重污区域清洁</List.Item>);
+          }
+          if (index === 11) {
+            return (<List.Item key={index}
+           
+              onClick={this.findbyId(index+1)}
+            >小时工</List.Item>);
+          }
+          if (index === 12) {
+            return (<List.Item key={index}
+             
+              onClick={this.findbyId(index+1)}
+            >护工</List.Item>);
+          }
+          if (index === 13) {
+            return (<List.Item key={index}
+             
+              onClick={this.findbyId(index+1)}
+            >涉外家政</List.Item>);
+          }
+
+          })}
+        </List>);
+
+
+
+
+
+
         const separator = (sectionID, rowID) => (
           <div
             key={`${sectionID}-${rowID}`}
             style={{
               backgroundColor: '#F5F5F9',
-              height: 8,
+              height: 6,
               borderTop: '1px solid #ECECED',
               borderBottom: '1px solid #ECECED',
             }}
@@ -134,6 +255,8 @@ class ProductPage extends React.Component {
             index = this.state.list.length - 1;
           }
           const obj = this.state.list[index--];
+
+          
           return (
             <div key={rowID} style={{ padding: '0 15px' }}>
               <div
@@ -145,10 +268,10 @@ class ProductPage extends React.Component {
                 }}
               >{obj.name}</div>
               <div style={{ display: 'flex', padding: '15px 0' }}>
-                <img style={{ height: '64px', marginRight: '15px' }} src={obj.photo} alt="" />
+                <img style={{ height: '64px', marginRight: '15px' }} src={"http://134.175.154.93:8888/group1/"+obj.photo} alt="" />
                 <div style={{ lineHeight: 1 }}>
                   <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.description}</div>
-                  <div><span style={{ fontSize: '30px', color: '#FF6E27' }}>价钱</span>¥ {obj.price}</div>
+                  <div><span style={{ fontSize: '15px', color: '#FF6E27' }}>价钱</span>¥<span  style={{ fontSize: '30px', color: '#FF6E27' }}> {obj.price}</span></div>
                 </div>
               </div>
             </div>
@@ -156,30 +279,59 @@ class ProductPage extends React.Component {
         };
     
         return (
-          <ListView
-            ref={el => this.lv = el}
-            dataSource={this.state.dataSource}
-            // renderHeader={() => <span>header</span>}
-            // renderHeader={()=>(<div style={{ padding: 30, textAlign: 'center'}}></div>)}
-            // renderFooter={() => (<div style={{ padding: 30, textAlign: 'center'}}>
-            //   {this.state.isLoading ? 'Loading...' : 'Loaded'}
-            // </div>)}
-            // renderSectionHeader={sectionData => (
-            //   <div>{`Task ${sectionData.split(' ')[1]}`}</div>
-            // )}
-            renderRow={row}
-            renderSeparator={separator}
-            style={{
-              height: this.state.height,
-              overflow: 'auto',
-            }}
-            pageSize={4}
-            onScroll={() => { console.log('scroll'); }}
-            scrollRenderAheadDistance={500}
-            onEndReached={this.onEndReached}
-            onEndReachedThreshold={10}
-          />
+          // 
+          <div>
+       
+      
+      <Drawer
+        className="my-drawer"
+        style={{ minHeight: document.documentElement.clientHeight }}
+        contentStyle={{ color: '#A6A6A6', textAlign: 'center'}}
+        sidebarStyle={{ border: '1px solid #ddd' }}
+        sidebar={sidebar}
+        docked={this.state.docked}
+        onOpenChange={this.onDock}
+      >
+       
+       <NavBar icon={<Icon type="ellipsis" />} onLeftClick={ this.onDock}>
+        家政种类选择
+      </NavBar>
+         <SearchBar placeholder="Search" maxLength={8} />
+         
+            <ListView
+              ref={el => this.lv = el}
+              dataSource={this.state.dataSource}
+              // renderHeader={() => <span>header</span>}
+              // renderHeader={()=>(<div style={{ padding: 30, textAlign: 'center'}}></div>)}
+              // renderFooter={() => (<div style={{ padding: 30, textAlign: 'center'}}>
+              //   {this.state.isLoading ? 'Loading...' : 'Loaded'}
+              // </div>)}
+              // renderSectionHeader={sectionData => (
+              //   <div>{`Task ${sectionData.split(' ')[1]}`}</div>
+              // )}
+              renderRow={row}
+              renderSeparator={separator}
+              style={{
+                height: this.state.height,
+                overflow: 'auto',
+              }}
+              pageSize={4}
+              onScroll={() => { console.log('scroll'); }}
+              scrollRenderAheadDistance={500}
+              onEndReached={this.onEndReached}
+              onEndReachedThreshold={10}
+            />
+           
+           </Drawer>
+           
+      
+      
+         
+         </div>
         );
+        ReactDOM.render(<ProductPage />, mountNode);
       }
+
+     
 }
-export default ProductPage;
+export default withRouter(connect()(ProductPage));

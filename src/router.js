@@ -5,6 +5,7 @@ import ProductPage from './routes/ProductPage'
 import App from './routes/App'
 import App2 from './routes/App2'
 
+
 function RouterConfig({ history }) {
   return (
     <Router history={history}>
@@ -13,7 +14,8 @@ function RouterConfig({ history }) {
           <Route path="/" exact component={IndexPage} />
           <Route path="/product" exact component={ProductPage} />
         </Switch>
-      </App2>
+     </App2>
+     
     </Router>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'dva'
 import {withRouter,routerRedux} from 'dva/router'
-import {TabBar,ListView} from 'antd-mobile'
+import {TabBar,ListView,List,NavBar,Icon,Drawer} from 'antd-mobile'
 import ProductPage from './ProductPage'
 
 
@@ -9,10 +9,13 @@ class App2 extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+       
         selectedTab: 'redTab',
         hidden: false,
+      
       };
     }
+
   
     renderContent(pageText) {
       return (
@@ -31,6 +34,8 @@ class App2 extends React.Component {
         </div>
       );
     }
+
+
 
     handlerTabChange = (tab)=>{
       console.log(this.props);
@@ -54,17 +59,34 @@ class App2 extends React.Component {
     }
   
     render() {
+
+
+
+      
+      
+
+
+
+
       return (
+        <div>
+
+      
+           
+
         <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0 }}>
+
+
           <TabBar
             unselectedTintColor="#949494"
             tintColor="#33A3F4"
             barTintColor="white"
             tabBarPosition="bottom"
-            hidden={this.state.hidden}
+           hidden={this.state.hidden}
             prerenderingSiblingsNumber={0}
+   
           >
-             
+
             <TabBar.Item
               title="Life"
               key="Life"
@@ -163,6 +185,9 @@ class App2 extends React.Component {
               {this.renderContent('My')}
             </TabBar.Item>
           </TabBar>
+          
+        </div>
+        
         </div>
       );
     }
