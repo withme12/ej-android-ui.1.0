@@ -1,4 +1,4 @@
-import {  ListView,SearchBar } from 'antd-mobile';
+import {  ListView,SearchBar,Button } from 'antd-mobile';
 import {TabBar,List,NavBar,Icon,Drawer,sidebar} from 'antd-mobile'
 import {ReactDOM,mountNode} from 'react'
 import React from 'react'
@@ -76,14 +76,13 @@ class ProductPage extends React.Component {
           }],
           docked: false,
           dataSource,
+          price:0,
           isLoading: true,
           height: (document.documentElement.clientHeight * 3) / 4,
         };
       }
 
 
-      
-      
       onDock = () => {
         this.setState({
           docked: !this.state.docked,
@@ -133,111 +132,114 @@ class ProductPage extends React.Component {
 
       findbyId(id){
         axios.get("/category/findAllProductWithCategory?id="+id).then((result) => {
-          //  this.setState({list:result.data});
+          this.setState({list:result.data});
+          //console.log(id)
         })
       }
 
 
+      searchMethod(mess){
+        axios.post("/category/query",{name:mess}).then((result)=>{
+          this.setState({list:result.data});
+          console.log(mess+"mess");
+        })
+      }
+
+      priceCount(pricee){
+this.setState({price:this.price+pricee});
+console.log(this.price);
+      }
+
       render() {
-
-
-
         const sidebar = (<List>
           {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((i, index) => {
             if (index === 0) {
               return (<List.Item key={index} 
-             
-               
-                onClick={this.findbyId(index+1)}
+  
+                onClick={() => {this.findbyId(1) }}
               >保姆</List.Item>);
             }
             if (index === 1) {
             return (<List.Item key={index}
            
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(2) }}
             >育婴</List.Item>);
           }
           if (index === 2) {
             return (<List.Item key={index}
               
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(3) }}
             >保洁</List.Item>);
           }
           if (index === 3) {
             return (<List.Item key={index}
               
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(4) }}
             >月嫂</List.Item>);
           }
           if (index === 4) {
             return (<List.Item key={index}
               
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(5) }}
             >搬家</List.Item>);
           }
           if (index ===5) {
             return (<List.Item key={index}
               
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(6) }}
             >老人护理</List.Item>);
           }
           if (index === 6) {
             return (<List.Item key={index}
               
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(7) }}
             >高级家具安装</List.Item>);
           }
           if (index === 7) {
             return (<List.Item key={index}
           
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(8) }}
             >一般家具安装</List.Item>);
           }
           if (index === 8) {
             return (<List.Item key={index}
            
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(9) }}
             >家庭烹饪</List.Item>);
           }
           if (index === 9) {
             return (<List.Item key={index}
            
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(10) }}
             >普通区域清洁</List.Item>);
           }
           if (index === 10) {
             return (<List.Item key={index}
            
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(11) }}
             >重污区域清洁</List.Item>);
           }
           if (index === 11) {
             return (<List.Item key={index}
            
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(12) }}
             >小时工</List.Item>);
           }
           if (index === 12) {
             return (<List.Item key={index}
              
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(13) }}
             >护工</List.Item>);
           }
           if (index === 13) {
             return (<List.Item key={index}
              
-              onClick={this.findbyId(index+1)}
+              onClick={() => {this.findbyId(14) }}
             >涉外家政</List.Item>);
           }
 
           })}
         </List>);
-
-
-
-
-
-
         const separator = (sectionID, rowID) => (
           <div
             key={`${sectionID}-${rowID}`}
@@ -271,7 +273,10 @@ class ProductPage extends React.Component {
                 <img style={{ height: '64px', marginRight: '15px' }} src={"http://134.175.154.93:8888/group1/"+obj.photo} alt="" />
                 <div style={{ lineHeight: 1 }}>
                   <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.description}</div>
-                  <div><span style={{ fontSize: '15px', color: '#FF6E27' }}>价钱</span>¥<span  style={{ fontSize: '30px', color: '#FF6E27' }}> {obj.price}</span></div>
+                  <div><span style={{ fontSize: '15px', color: '#FF6E27' }}>价钱</span>¥<span  style={{ fontSize: '30px', color: '#FF6E27' }}> {obj.price}</span>
+                  <span><Button type="primary" size="small" >添加</Button></span>
+                  {/* onclick={this.priceCount(obj.price)} */}
+                  </div>
                 </div>
               </div>
             </div>
@@ -279,7 +284,7 @@ class ProductPage extends React.Component {
         };
     
         return (
-          // 
+
           <div>
        
       
@@ -293,10 +298,10 @@ class ProductPage extends React.Component {
         onOpenChange={this.onDock}
       >
        
-       <NavBar icon={<Icon type="ellipsis" />} onLeftClick={ this.onDock}>
+       <NavBar icon={<Icon type="ellipsis" />}  onLeftClick={ this.onDock}>
         家政种类选择
       </NavBar>
-         <SearchBar placeholder="Search" maxLength={8} />
+        
          
             <ListView
               ref={el => this.lv = el}
